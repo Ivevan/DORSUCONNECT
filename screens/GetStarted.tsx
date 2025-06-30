@@ -1,0 +1,151 @@
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
+import React from 'react';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+type RootStackParamList = {
+  GetStarted: undefined;
+  SignIn: undefined;
+  CreateAccount: undefined;
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'GetStarted'>;
+
+const { width, height } = Dimensions.get('window');
+
+const GetStarted = () => {
+  const navigation = useNavigation<NavigationProp>();
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        {/* Logo Section */}
+        <View style={styles.topSection}>
+          <View style={styles.logoPlaceholder} />
+          <Text style={styles.title}>DOrSU CONNECT</Text>
+          <Text style={styles.subtitle}>Your Academic AI Assistant</Text>
+          <Text style={styles.aiText}>AI Powered</Text>
+        </View>
+
+        {/* Bottom Section with Buttons and University Name */}
+        <View style={styles.bottomSection}>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.emailButton} onPress={() => {}}>
+              <MaterialCommunityIcons name="email-outline" size={24} color="black" style={styles.buttonIcon} />
+              <Text style={styles.emailButtonText}>Continue with Email</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={styles.darkButton} 
+              onPress={() => navigation.navigate('CreateAccount')}
+            >
+              <MaterialIcons name="person-add-alt" size={24} color="white" style={styles.buttonIcon} />
+              <Text style={styles.darkButtonText}>Sign up</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.darkButton} 
+              onPress={() => navigation.navigate('SignIn')}
+            >
+              <MaterialIcons name="login" size={24} color="white" style={styles.buttonIcon} />
+              <Text style={styles.darkButtonText}>Log in</Text>
+            </TouchableOpacity>
+          </View>
+          
+          <Text style={styles.universityText}>Davao Oriental State University</Text>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F2F0E9',
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
+  topSection: {
+    alignItems: 'center',
+    marginTop: height * 0.15, // Adjust based on screen height
+  },
+  logoPlaceholder: {
+    width: width * 0.35,
+    height: width * 0.35,
+    backgroundColor: '#D9D9D9',
+    borderRadius: 12,
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#000000',
+    marginBottom: 8,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#000000',
+    marginBottom: 4,
+  },
+  aiText: {
+    fontSize: 14,
+    color: '#000000',
+  },
+  bottomSection: {
+    position: 'absolute',
+    bottom: 130,
+    left: 20,
+    right: 20,
+  },
+  buttonContainer: {
+    width: '100%',
+    gap: 8, // Reduced gap between buttons
+    marginBottom: 24, // Space between buttons and university name
+  },
+  emailButton: {
+    backgroundColor: '#FFFFFF',
+    paddingVertical: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  emailButtonText: {
+    color: '#000000',
+    fontSize: 16,
+    fontWeight: '500',
+    marginLeft: 8,
+  },
+  darkButton: {
+    backgroundColor: '#333333',
+    paddingVertical: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  darkButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '500',
+    marginLeft: 8,
+  },
+  buttonIcon: {
+    marginRight: 4,
+  },
+  universityText: {
+    fontSize: 14,
+    color: '#000000',
+    textAlign: 'center',
+  },
+});
+
+export default GetStarted; 
