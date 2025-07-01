@@ -1,10 +1,26 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, Dimensions } from 'react-native';
 import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+type RootStackParamList = {
+  GetStarted: undefined;
+  SignIn: undefined;
+  CreateAccount: undefined;
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignIn'>;
 
 const { width } = Dimensions.get('window');
 
 const SignIn = () => {
+  const navigation = useNavigation<NavigationProp>();
+
+  const handleClose = () => {
+    navigation.navigate('GetStarted');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -12,7 +28,7 @@ const SignIn = () => {
         <View style={styles.topSection}>
           <View style={styles.logoContainer}>
             <View style={styles.logoPlaceholder}>
-              <MaterialIcons name="close" size={32} color="black" />
+              {/* Logo will be placed here */}
             </View>
             <Text style={styles.title}>DOrSU Connect</Text>
             <Text style={styles.subtitle}>Your Academic AI Assistant</Text>
@@ -38,18 +54,27 @@ const SignIn = () => {
               placeholderTextColor="#666"
               secureTextEntry
             />
-            <TouchableOpacity style={styles.forgotPassword}>
+            <TouchableOpacity 
+              style={styles.forgotPassword}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
               <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity style={styles.signInButton}>
+          <TouchableOpacity 
+            style={styles.signInButton}
+            onPress={() => navigation.navigate('GetStarted')}
+          >
             <Text style={styles.signInButtonText}>Sign In</Text>
           </TouchableOpacity>
 
           <View style={styles.signUpContainer}>
             <Text style={styles.signUpText}>Don't have an account? </Text>
-            <TouchableOpacity>
+            <TouchableOpacity 
+              onPress={() => navigation.navigate('CreateAccount')}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
               <Text style={styles.signUpLink}>Sign Up</Text>
             </TouchableOpacity>
           </View>

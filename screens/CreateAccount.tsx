@@ -17,6 +17,10 @@ const { width } = Dimensions.get('window');
 const CreateAccount = () => {
   const navigation = useNavigation<NavigationProp>();
 
+  const handleClose = () => {
+    navigation.navigate('GetStarted');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -24,7 +28,7 @@ const CreateAccount = () => {
         <View style={styles.topSection}>
           <View style={styles.logoContainer}>
             <View style={styles.logoPlaceholder}>
-              <MaterialIcons name="close" size={32} color="black" />
+              {/* Logo will be placed here */}
             </View>
             <Text style={styles.title}>DOrSU Connect</Text>
             <Text style={styles.subtitle}>Your Academic AI Assistant</Text>
@@ -65,13 +69,19 @@ const CreateAccount = () => {
             />
           </View>
 
-          <TouchableOpacity style={styles.signInButton}>
+          <TouchableOpacity 
+            style={styles.signInButton}
+            onPress={() => navigation.navigate('GetStarted')}
+          >
             <Text style={styles.signInButtonText}>Sign Up</Text>
           </TouchableOpacity>
 
           <View style={styles.signUpContainer}>
             <Text style={styles.signUpText}>Already have an account? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+            <TouchableOpacity 
+              onPress={() => navigation.navigate('SignIn')}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
               <Text style={styles.signUpLink}>Sign In</Text>
             </TouchableOpacity>
           </View>
