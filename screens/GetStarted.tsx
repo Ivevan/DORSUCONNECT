@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, SafeAreaView, Platform } from 'react-native';
 import React from 'react';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -56,6 +56,7 @@ const GetStarted = () => {
           <Text style={styles.universityText}>Davao Oriental State University</Text>
         </View>
       </View>
+      <View style={styles.bottomSpacer} />
     </SafeAreaView>
   );
 };
@@ -68,6 +69,10 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 20,
+    paddingBottom: Platform.OS === 'android' ? 20 : 0,
+  },
+  bottomSpacer: {
+    height: Platform.OS === 'android' ? 16 : 0,
   },
   topSection: {
     alignItems: 'center',
@@ -99,7 +104,7 @@ const styles = StyleSheet.create({
   },
   bottomSection: {
     position: 'absolute',
-    bottom: 130,
+    bottom: Platform.OS === 'android' ? 50 : 130,
     left: 20,
     right: 20,
   },
@@ -124,7 +129,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   darkButton: {
-    backgroundColor: '#333333',
+    backgroundColor: '#222526',
     paddingVertical: 16,
     borderRadius: 8,
     alignItems: 'center',

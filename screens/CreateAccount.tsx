@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, Dimensions, Platform } from 'react-native';
 import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -87,6 +87,7 @@ const CreateAccount = () => {
           </View>
         </View>
       </View>
+      <View style={styles.bottomSpacer} />
     </SafeAreaView>
   );
 };
@@ -99,6 +100,10 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 20,
+    paddingBottom: Platform.OS === 'android' ? 20 : 0,
+  },
+  bottomSpacer: {
+    height: Platform.OS === 'android' ? 16 : 0,
   },
   topSection: {
     marginTop: 50,
