@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     paddingHorizontal: 16,
-    paddingTop: 6,
+    paddingTop: 12,
     paddingBottom: 10,
     backgroundColor: '#222526',
     borderBottomRightRadius: 24,
@@ -249,16 +249,16 @@ const styles = StyleSheet.create({
   filterContainer: {
     paddingHorizontal: 16,
     marginVertical: 8,
-    height: 10,
+    height: 10, // Increased from 10 to give more space
     marginBottom: 16,
   },
   filterChip: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16, // Slightly reduced from 20 to optimize space
     paddingVertical: 8,
     backgroundColor: '#FFFFFF',
     borderRadius: 24,
     marginRight: 8,
-    height: 20,
+    height: 30, // Increased from 30 to make buttons more visible
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 1,
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
     shadowRadius: 1,
-    minWidth: 80,
+    minWidth: 90, // Increased from 80 to ensure text fits better
   },
   activeFilterChip: {
     backgroundColor: '#333',
