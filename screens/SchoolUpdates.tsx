@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, ScrollView, Dimensions, Platform, StatusBar } from 'react-native';
-import React, { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, ScrollView, Dimensions, Platform, StatusBar, AppState } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -15,12 +15,41 @@ const { width } = Dimensions.get('window');
 
 type FilterType = 'All' | 'Announcement' | 'Event' | 'Academic';
 
+interface UpdateCardProps {
+  tags: string[];
+  title: string;
+  description: string;
+  date: string;
+  id: string; // Add this line
+}
+
 const SchoolUpdates = () => {
   const navigation = useNavigation<NavigationProp>();
   const [activeFilter, setActiveFilter] = useState<FilterType>('All');
+  const [expandedCards, setExpandedCards] = useState<string[]>([]); // Add this line
+  const [activeTab, setActiveTab] = useState('home'); // Add this line
+  const [appState, setAppState] = useState(AppState.currentState);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      setAppState(nextAppState);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
 
   const handleBack = () => {
     navigation.goBack();
+  };
+
+  const toggleCardExpansion = (id: string) => {
+    setExpandedCards(prev => 
+      prev.includes(id) 
+        ? prev.filter(cardId => cardId !== id)
+        : [...prev, id]
+    );
   };
 
   const FilterChip = ({ label, isActive, onPress }: { label: FilterType, isActive: boolean, onPress: () => void }) => (
@@ -36,39 +65,81 @@ const SchoolUpdates = () => {
     tags, 
     title, 
     description, 
-    date 
+    date,
+    id 
+  }: UpdateCardProps) => {
+    const isExpanded = expandedCards.includes(id);
+    const maxLines = isExpanded ? undefined : 2;
+
+    return (
+      <View style={styles.updateCard}>
+        <View style={styles.tagContainer}>
+          {tags.map((tag, index) => (
+            <View 
+              key={index} 
+              style={[
+                styles.tag, 
+                tag.toLowerCase() === 'urgent' && styles.urgentTag
+              ]}
+            >
+              <Text style={[
+                styles.tagText,
+                tag.toLowerCase() === 'urgent' && styles.urgentTagText
+              ]}>{tag}</Text>
+            </View>
+          ))}
+        </View>
+        <Text style={styles.updateTitle}>{title}</Text>
+        <Text 
+          style={[
+            styles.updateDescription,
+            isExpanded && styles.expandedDescription
+          ]} 
+          numberOfLines={maxLines}
+        >
+          {description}
+        </Text>
+        <View style={styles.updateFooter}>
+          <TouchableOpacity onPress={() => toggleCardExpansion(id)}>
+            <Text style={styles.readMoreLink}>
+              {isExpanded ? 'Show less' : 'Read more'}
+            </Text>
+          </TouchableOpacity>
+          <Text style={styles.updateDate}>{date}</Text>
+        </View>
+      </View>
+    );
+  };
+
+  const NavItem = ({ 
+    icon, 
+    activeIcon, 
+    label, 
+    isActive, 
+    onPress 
   }: { 
-    tags: string[], 
-    title: string, 
-    description: string, 
-    date: string 
+    icon: any, 
+    activeIcon: any, 
+    label: string, 
+    isActive: boolean, 
+    onPress: () => void 
   }) => (
-    <View style={styles.updateCard}>
-      <View style={styles.tagContainer}>
-        {tags.map((tag, index) => (
-          <View 
-            key={index} 
-            style={[
-              styles.tag, 
-              tag.toLowerCase() === 'urgent' && styles.urgentTag
-            ]}
-          >
-            <Text style={[
-              styles.tagText,
-              tag.toLowerCase() === 'urgent' && styles.urgentTagText
-            ]}>{tag}</Text>
-          </View>
-        ))}
-      </View>
-      <Text style={styles.updateTitle}>{title}</Text>
-      <Text style={styles.updateDescription}>{description}</Text>
-      <View style={styles.updateFooter}>
-        <TouchableOpacity>
-          <Text style={styles.readMoreLink}>Read more</Text>
-        </TouchableOpacity>
-        <Text style={styles.updateDate}>{date}</Text>
-      </View>
-    </View>
+    <TouchableOpacity 
+      style={styles.navItem} 
+      onPress={onPress}
+    >
+      <Ionicons 
+        name={isActive ? activeIcon : icon} 
+        size={24} 
+        color={isActive ? '#222526' : '#666'} 
+      />
+      <Text style={[
+        styles.navLabel,
+        isActive && styles.navLabelActive
+      ]}>
+        {label}
+      </Text>
+    </TouchableOpacity>
   );
 
   return (
@@ -125,31 +196,50 @@ const SchoolUpdates = () => {
       <ScrollView 
         style={styles.updatesContainer}
         contentContainerStyle={styles.updatesContentContainer}
+        showsVerticalScrollIndicator={false}
+        bounces={true}
+        overScrollMode="never"
       >
         <UpdateCard
+          id="1" // Add unique IDs for each card
           tags={['Announcement', 'Urgent']}
           title="Enrollment for Second Semester Now Open"
           description="Enrollment for the second semester of Academic Year 2024-2025 is now open. Please visit the Registrar's Office or use the online enrollment system."
           date="Apr 15, 2024"
         />
         <UpdateCard
+          id="2"
           tags={['Announcement']}
           title="Scholarship Applications for AY 2024-2025"
-          description="Scholarship applications for the Academic Year 2024-2025 are now being accepted. Deadline for..."
+          description="Scholarship applications for the Academic Year 2024-2025 are now being accepted. Deadline for submission is May 15, 2024."
           date="Apr 15, 2024"
         />
       </ScrollView>
 
-      <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="home-outline" size={24} color="#333" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="chatbubble-outline" size={24} color="#666" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="settings-outline" size={24} color="#666" />
-        </TouchableOpacity>
+      <View style={styles.bottomNavContainer}>
+        <View style={styles.bottomNav}>
+          <NavItem
+            icon="home-outline"
+            activeIcon="home"
+            label="Home"
+            isActive={activeTab === 'home'}
+            onPress={() => setActiveTab('home')}
+          />
+          <NavItem
+            icon="chatbubble-outline"
+            activeIcon="chatbubble"
+            label="Chat"
+            isActive={activeTab === 'chat'}
+            onPress={() => setActiveTab('chat')}
+          />
+          <NavItem
+            icon="settings-outline"
+            activeIcon="settings"
+            label="Settings"
+            isActive={activeTab === 'settings'}
+            onPress={() => setActiveTab('settings')}
+          />
+        </View>
       </View>
       <View style={styles.bottomSpacer} />
     </SafeAreaView>
@@ -249,7 +339,7 @@ const styles = StyleSheet.create({
   filterContainer: {
     paddingHorizontal: 16,
     marginVertical: 8,
-    height: 10, // Increased from 10 to give more space
+    height: 40, // Increased from 10 to give more space
     marginBottom: 16,
   },
   filterChip: {
@@ -288,9 +378,10 @@ const styles = StyleSheet.create({
   updatesContainer: {
     flex: 1,
     paddingHorizontal: 16,
+    marginTop: -350, // Added to move cards up and fill the gap
   },
   updatesContentContainer: {
-    paddingBottom: 16,
+    paddingBottom: 100, // Increased to provide space for bottom navigation
   },
   updateCard: {
     backgroundColor: '#FFFFFF',
@@ -339,6 +430,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     lineHeight: 20,
   },
+  expandedDescription: {
+    marginBottom: 16,
+  },
   updateFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -348,26 +442,52 @@ const styles = StyleSheet.create({
     color: '#333',
     fontSize: 14,
     fontWeight: '500',
+    paddingVertical: 4, // Add padding for better touch target
   },
   updateDate: {
     color: '#666',
     fontSize: 12,
   },
-  bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+  bottomNavContainer: {
+    width: '100%',
     backgroundColor: '#FFFFFF',
-    paddingVertical: 12,
     borderTopWidth: 1,
     borderTopColor: '#E8E8E8',
-    paddingBottom: Platform.OS === 'android' ? 12 : 24,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
-  bottomSpacer: {
-    height: Platform.OS === 'android' ? 16 : 0,
+  bottomNav: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    paddingTop: 8,
+    paddingBottom: Platform.OS === 'android' ? 8 : 24,
+    backgroundColor: '#FFFFFF',
   },
   navItem: {
-    padding: 4,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 4,
+    minWidth: 80,
+    maxWidth: 120,
+  },
+  navLabel: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 4,
+    fontWeight: '500',
+    textAlign: 'center',
+    position: 'relative',
+  },
+  navLabelActive: {
+    color: '#222526',
+    fontWeight: '600',
+  },
+  bottomSpacer: {
+    height: Platform.OS === 'android' ? 0 : 0,
   },
 });
 
