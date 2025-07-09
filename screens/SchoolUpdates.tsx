@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, ScrollView, Dimensions, Platform, StatusBar, AppState } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, ScrollView, Dimensions, Platform, StatusBar } from 'react-native';
+import React, { useState } from 'react';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import User_NavBar from '../navigation/User_NavBar';
 
 type RootStackParamList = {
   GetStarted: undefined;
@@ -28,17 +29,6 @@ const SchoolUpdates = () => {
   const [activeFilter, setActiveFilter] = useState<FilterType>('All');
   const [expandedCards, setExpandedCards] = useState<string[]>([]); // Add this line
   const [activeTab, setActiveTab] = useState('home'); // Add this line
-  const [appState, setAppState] = useState(AppState.currentState);
-
-  useEffect(() => {
-    const subscription = AppState.addEventListener('change', nextAppState => {
-      setAppState(nextAppState);
-    });
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
 
   const handleBack = () => {
     navigation.goBack();
@@ -110,37 +100,6 @@ const SchoolUpdates = () => {
       </View>
     );
   };
-
-  const NavItem = ({ 
-    icon, 
-    activeIcon, 
-    label, 
-    isActive, 
-    onPress 
-  }: { 
-    icon: any, 
-    activeIcon: any, 
-    label: string, 
-    isActive: boolean, 
-    onPress: () => void 
-  }) => (
-    <TouchableOpacity 
-      style={styles.navItem} 
-      onPress={onPress}
-    >
-      <Ionicons 
-        name={isActive ? activeIcon : icon} 
-        size={24} 
-        color={isActive ? '#222526' : '#666'} 
-      />
-      <Text style={[
-        styles.navLabel,
-        isActive && styles.navLabelActive
-      ]}>
-        {label}
-      </Text>
-    </TouchableOpacity>
-  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -216,32 +175,10 @@ const SchoolUpdates = () => {
         />
       </ScrollView>
 
-      <View style={styles.bottomNavContainer}>
-        <View style={styles.bottomNav}>
-          <NavItem
-            icon="home-outline"
-            activeIcon="home"
-            label="Home"
-            isActive={activeTab === 'home'}
-            onPress={() => setActiveTab('home')}
-          />
-          <NavItem
-            icon="chatbubble-outline"
-            activeIcon="chatbubble"
-            label="Chat"
-            isActive={activeTab === 'chat'}
-            onPress={() => setActiveTab('chat')}
-          />
-          <NavItem
-            icon="settings-outline"
-            activeIcon="settings"
-            label="Settings"
-            isActive={activeTab === 'settings'}
-            onPress={() => setActiveTab('settings')}
-          />
-        </View>
-      </View>
-      <View style={styles.bottomSpacer} />
+      <User_NavBar 
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+      />
     </SafeAreaView>
   );
 };
@@ -379,6 +316,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     marginTop: -350, // Added to move cards up and fill the gap
+    marginBottom: 60, // Add space for navigation bar
   },
   updatesContentContainer: {
     paddingBottom: 100, // Increased to provide space for bottom navigation
@@ -447,47 +385,6 @@ const styles = StyleSheet.create({
   updateDate: {
     color: '#666',
     fontSize: 12,
-  },
-  bottomNavContainer: {
-    width: '100%',
-    backgroundColor: '#FFFFFF',
-    borderTopWidth: 1,
-    borderTopColor: '#E8E8E8',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-    paddingTop: 8,
-    paddingBottom: Platform.OS === 'android' ? 8 : 24,
-    backgroundColor: '#FFFFFF',
-  },
-  navItem: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 4,
-    minWidth: 80,
-    maxWidth: 120,
-  },
-  navLabel: {
-    fontSize: 12,
-    color: '#666',
-    marginTop: 4,
-    fontWeight: '500',
-    textAlign: 'center',
-    position: 'relative',
-  },
-  navLabelActive: {
-    color: '#222526',
-    fontWeight: '600',
-  },
-  bottomSpacer: {
-    height: Platform.OS === 'android' ? 0 : 0,
   },
 });
 
