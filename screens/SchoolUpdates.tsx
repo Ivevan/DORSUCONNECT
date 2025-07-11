@@ -8,6 +8,7 @@ import User_NavBar from '../navigation/User_NavBar';
 type RootStackParamList = {
   GetStarted: undefined;
   SchoolUpdates: undefined;
+  Chat: undefined;
 };
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'SchoolUpdates'>;
@@ -29,6 +30,13 @@ const SchoolUpdates = () => {
   const [activeFilter, setActiveFilter] = useState<FilterType>('All');
   const [expandedCards, setExpandedCards] = useState<string[]>([]); // Add this line
   const [activeTab, setActiveTab] = useState('home'); // Add this line
+
+  const handleTabChange = (tab: string) => {
+    if (tab === 'chat') {
+      navigation.navigate('Chat');
+    }
+    setActiveTab(tab);
+  };
 
   const handleBack = () => {
     navigation.goBack();
@@ -177,7 +185,7 @@ const SchoolUpdates = () => {
 
       <User_NavBar 
         activeTab={activeTab}
-        onTabChange={setActiveTab}
+        onTabChange={handleTabChange}
       />
     </SafeAreaView>
   );

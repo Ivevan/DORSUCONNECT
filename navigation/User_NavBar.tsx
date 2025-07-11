@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 interface NavItemProps {
   icon: any;
@@ -29,6 +30,16 @@ const NavItem = ({ icon, activeIcon, label, isActive, onPress }: NavItemProps) =
 );
 
 const User_NavBar = ({ activeTab, onTabChange }: UserNavBarProps) => {
+  const navigation = useNavigation();
+
+  const handleNavigation = (tab: string) => {
+    if (tab === 'home' && activeTab !== 'home') {
+      navigation.goBack(); // This will return to the previous screen
+    } else {
+      onTabChange(tab);
+    }
+  };
+
   return (
     <View style={styles.bottomNav}>
       <NavItem
@@ -36,21 +47,21 @@ const User_NavBar = ({ activeTab, onTabChange }: UserNavBarProps) => {
         activeIcon="home"
         label="Home"
         isActive={activeTab === 'home'}
-        onPress={() => onTabChange('home')}
+        onPress={() => handleNavigation('home')}
       />
       <NavItem
         icon="chatbubble-outline"
         activeIcon="chatbubble"
         label="Chat"
         isActive={activeTab === 'chat'}
-        onPress={() => onTabChange('chat')}
+        onPress={() => handleNavigation('chat')}
       />
       <NavItem
         icon="settings-outline"
         activeIcon="settings"
         label="Settings"
         isActive={activeTab === 'settings'}
-        onPress={() => onTabChange('settings')}
+        onPress={() => handleNavigation('settings')}
       />
     </View>
   );
