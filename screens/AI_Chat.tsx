@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import User_NavBar from '../navigation/User_NavBar';
 
-const Chat = () => {
+const AI_Chat = () => {
   const [activeTab, setActiveTab] = useState('chat');
   const [message, setMessage] = useState('');
 
@@ -206,4 +206,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Chat; 
+export default AI_Chat; 

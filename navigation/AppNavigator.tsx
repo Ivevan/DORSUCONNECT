@@ -7,7 +7,7 @@ import GetStarted from '../screens/GetStarted';
 import SignIn from '../screens/SignIn';
 import CreateAccount from '../screens/CreateAccount';
 import SchoolUpdates from '../screens/SchoolUpdates';
-import Chat from '../screens/Chat';
+import AI_Chat from '../screens/AI_Chat';
 
 const Stack = createNativeStackNavigator();
 
@@ -53,7 +53,7 @@ const AppNavigator = () => {
         />
         <Stack.Screen 
           name="Chat" 
-          component={Chat}
+          component={AI_Chat}
         />
       </Stack.Navigator>
     </NavigationContainer>
