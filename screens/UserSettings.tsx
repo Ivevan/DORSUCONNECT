@@ -14,7 +14,7 @@ type RootStackParamList = {
   UserSettings: undefined;
 };
 
-const SchoolUpdates = () => {
+const UserSettings = () => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   return (
@@ -31,11 +31,11 @@ const SchoolUpdates = () => {
         translucent={true}
       />
       <View style={styles.content}>
-        <Text style={styles.title}>School Updates</Text>
-        <Text style={styles.subtitle}>This is the School Updates screen.</Text>
+        <Text style={styles.title}>User Settings</Text>
+        <Text style={styles.subtitle}>This is the User Settings screen.</Text>
       </View>
       <BottomNavBar
-        activeTab="home"
+        activeTab="settings"
         onHomePress={() => navigation.navigate('SchoolUpdates')}
         onChatPress={() => navigation.navigate('AIChat')}
         onSettingsPress={() => navigation.navigate('UserSettings')}
@@ -71,4 +71,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SchoolUpdates; 
+export default UserSettings; 

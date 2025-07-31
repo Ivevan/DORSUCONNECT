@@ -7,7 +7,8 @@ import GetStarted from '../screens/GetStarted';
 import SignIn from '../screens/SignIn';
 import CreateAccount from '../screens/CreateAccount';
 import SchoolUpdates from '../screens/SchoolUpdates';
-import AI_Chat from '../screens/AI_Chat';
+import AIChat from '../screens/AIChat';
+import UserSettings from '../screens/UserSettings';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,10 @@ const screenOptions = {
   contentStyle: {
     backgroundColor: 'transparent',
   },
+  // Prevent screen merging
+  detachInactiveScreens: true,
+  // Maintain screen state
+  freezeOnBlur: false,
 };
 
 const AppNavigator = () => {
@@ -41,7 +46,7 @@ const AppNavigator = () => {
         />
         <Stack.Screen 
           name="SignIn" 
-          component={SignIn} 
+          component={SignIn}
         />
         <Stack.Screen 
           name="CreateAccount" 
@@ -52,8 +57,12 @@ const AppNavigator = () => {
           component={SchoolUpdates}
         />
         <Stack.Screen 
-          name="Chat" 
-          component={AI_Chat}
+          name="AIChat" 
+          component={AIChat}
+        />
+        <Stack.Screen 
+          name="UserSettings" 
+          component={UserSettings}
         />
       </Stack.Navigator>
     </NavigationContainer>

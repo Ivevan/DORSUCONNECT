@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions, SafeAreaView, Platform } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Platform, StatusBar } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import React from 'react';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -16,9 +17,20 @@ const { width, height } = Dimensions.get('window');
 
 const GetStarted = () => {
   const navigation = useNavigation<NavigationProp>();
-
+  const insets = useSafeAreaInsets();
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={[styles.container, {
+      paddingTop: insets.top,
+      paddingBottom: insets.bottom,
+      paddingLeft: insets.left,
+      paddingRight: insets.right,
+    }]}
+    >
+      <StatusBar
+        backgroundColor="transparent"
+        barStyle="dark-content"
+        translucent={true}
+      />
       <View style={styles.content}>
         {/* Logo Section */}
         <View style={styles.topSection}>
@@ -56,8 +68,7 @@ const GetStarted = () => {
           <Text style={styles.universityText}>Davao Oriental State University</Text>
         </View>
       </View>
-      <View style={styles.bottomSpacer} />
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -69,14 +80,14 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingBottom: Platform.OS === 'android' ? 20 : 0,
-  },
-  bottomSpacer: {
-    height: Platform.OS === 'android' ? 16 : 0,
+    paddingTop: Platform.OS === 'android' ? 8 : 44,
+    paddingBottom: Platform.OS === 'android' ? 20 : 34,
   },
   topSection: {
     alignItems: 'center',
-    marginTop: height * 0.15, // Adjust based on screen height
+    flex: 1,
+    justifyContent: 'center',
+    marginTop: -height * 0.1, // Adjust for better centering
   },
   logoPlaceholder: {
     width: width * 0.35,
@@ -103,15 +114,12 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   bottomSection: {
-    position: 'absolute',
-    bottom: Platform.OS === 'android' ? 50 : 130,
-    left: 20,
-    right: 20,
+    width: '100%',
   },
   buttonContainer: {
     width: '100%',
-    gap: 8, // Reduced gap between buttons
-    marginBottom: 24, // Space between buttons and university name
+    gap: 8,
+    marginBottom: 24,
   },
   emailButton: {
     backgroundColor: '#FFFFFF',

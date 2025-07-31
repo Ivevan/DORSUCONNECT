@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, Dimensions, Platform } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Dimensions, Platform, StatusBar } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -8,7 +9,7 @@ type RootStackParamList = {
   GetStarted: undefined;
   SignIn: undefined;
   CreateAccount: undefined;
-  SchoolUpdates: undefined;
+  SchoolUpdates: undefined; // Added new screen
 };
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignIn'>;
@@ -22,8 +23,25 @@ const SignIn = () => {
     navigation.navigate('GetStarted');
   };
 
+  // Function to handle sign in button press
+  const handleSignIn = () => {
+    navigation.navigate('SchoolUpdates');
+  };
+
+  const insets = useSafeAreaInsets();
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={[styles.container, {
+      paddingTop: insets.top,
+      paddingBottom: insets.bottom,
+      paddingLeft: insets.left,
+      paddingRight: insets.right,
+    }]}
+    >
+      <StatusBar
+        backgroundColor="transparent"
+        barStyle="dark-content"
+        translucent={true}
+      />
       <View style={styles.content}>
         {/* Logo and Title Section */}
         <View style={styles.topSection}>
@@ -65,7 +83,7 @@ const SignIn = () => {
 
           <TouchableOpacity 
             style={styles.signInButton}
-            onPress={() => navigation.navigate('SchoolUpdates')}
+            onPress={handleSignIn}
           >
             <Text style={styles.signInButtonText}>Sign In</Text>
           </TouchableOpacity>
@@ -81,8 +99,7 @@ const SignIn = () => {
           </View>
         </View>
       </View>
-      <View style={styles.bottomSpacer} />
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -94,13 +111,11 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingBottom: Platform.OS === 'android' ? 20 : 0,
-  },
-  bottomSpacer: {
-    height: Platform.OS === 'android' ? 16 : 0,
+    paddingTop: Platform.OS === 'android' ? 8 : 44,
+    paddingBottom: Platform.OS === 'android' ? 20 : 34,
   },
   topSection: {
-    marginTop: 50,
+    marginTop: 20,
   },
   logoContainer: {
     alignItems: 'center',

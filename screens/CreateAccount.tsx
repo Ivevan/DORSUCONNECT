@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, Dimensions, Platform } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Dimensions, Platform, StatusBar } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -21,19 +22,23 @@ const CreateAccount = () => {
     navigation.navigate('GetStarted');
   };
 
+  const insets = useSafeAreaInsets();
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={[styles.container, {
+      paddingTop: insets.top,
+      paddingBottom: insets.bottom,
+      paddingLeft: insets.left,
+      paddingRight: insets.right,
+    }]}
+    >
+      <StatusBar
+        backgroundColor="transparent"
+        barStyle="dark-content"
+        translucent={true}
+      />
       <View style={styles.content}>
         {/* Logo and Title Section */}
         <View style={styles.topSection}>
-          <View style={styles.logoContainer}>
-            <View style={styles.logoPlaceholder}>
-              {/* Logo will be placed here */}
-            </View>
-            <Text style={styles.title}>DOrSU Connect</Text>
-            <Text style={styles.subtitle}>Your Academic AI Assistant</Text>
-          </View>
-
           <View style={styles.welcomeSection}>
             <Text style={styles.welcomeText}>Create Account</Text>
             <Text style={styles.signInText}>Sign up to get started</Text>
@@ -87,8 +92,7 @@ const CreateAccount = () => {
           </View>
         </View>
       </View>
-      <View style={styles.bottomSpacer} />
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -100,65 +104,37 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingBottom: Platform.OS === 'android' ? 20 : 0,
-  },
-  bottomSpacer: {
-    height: Platform.OS === 'android' ? 16 : 0,
+    paddingTop: Platform.OS === 'android' ? 8 : 44,
+    paddingBottom: Platform.OS === 'android' ? 60 : 80,
   },
   topSection: {
-    marginTop: 50,
-  },
-  logoContainer: {
-    alignItems: 'center',
-    marginBottom: 40,
-  },
-  logoPlaceholder: {
-    width: width * 0.2,
-    height: width * 0.2,
-    backgroundColor: '#E8E8E8',
-    borderRadius: 16,
-    marginBottom: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#000000',
-    marginBottom: 4,
-    textAlign: 'center',
-    letterSpacing: 0.5,
-  },
-  subtitle: {
-    fontSize: 15,
-    color: '#666',
-    textAlign: 'center',
-    letterSpacing: 0.3,
+    marginTop: Platform.OS === 'android' ? 40 : 60,
   },
   welcomeSection: {
     alignItems: 'center',
-    marginBottom: 10,
-    marginTop: -10
+    marginBottom: 50,
+    marginTop: 0,
   },
   welcomeText: {
-    fontSize: 32,
+    fontSize: 36,
     fontWeight: '700',
     color: '#000000',
-    marginBottom: 1,
+    marginBottom: 12,
     textAlign: 'center',
     letterSpacing: 0.5,
   },
   signInText: {
-    fontSize: 17,
+    fontSize: 18,
     color: '#666',
     textAlign: 'center',
     letterSpacing: 0.3,
   },
   formContainer: {
     width: '100%',
+    paddingHorizontal: 10,
   },
   inputContainer: {
-    marginBottom: 24,
+    marginBottom: 30,
   },
   input: {
     backgroundColor: '#FFFFFF',
